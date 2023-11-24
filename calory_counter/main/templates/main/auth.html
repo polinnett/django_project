@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+    <section class="form">
+        <div class='container'>
+            <div class="form__wrapper">
+                <div class="form__content">
+                    <form method="post" class="form__body">
+                        {% csrf_token %}
+                        {% if login_form.non_field_errors %}
+                            <div class="form__label">{{ login_form.non_field_errors }}</div>
+                        {% endif %}
+                        {% for f in login_form %}
+                            {% if f.field.widget.input_type == 'password' %}
+                                <div class="form__input form__password hide">
+                                    {{ f }}
+                                    <a href="#"></a>
+                                </div>
+                            {% else %}
+                                <div class="form__input">
+                                    {% if f.label %}
+                                    <label class="form__label" for="{{ f.id_for_label }}">{{ f.label }}</label>
+                                    {% endif %}
+                                    {{ f }}
+                                </div>
+                            {% endif %}
+                            {% if f.errors %}
+                                <div class="form__label">{{ f.errors }}</div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="form__footer">
+                            <a href="{% url 'registration' %}" class="form__link">Еще нет аккаунта?</a>
+                            <button type="submit" class="btn form__btn">Войти</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,337 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    {% if user.is_authenticated %}
+        <section class="products">
+            <div class='container'>
+                
+                <h1 class="products__title">Дневник КБЖУ, которые вы сегодня получили:</h1>
+                <div class="products__amount">
+                    <div class="products__amount-img"><img src="{% static 'main/img/fruit.svg' %}" alt=""></div>
+                    <div class="products__amount-num">{{ products_list_len }}</div>
+                    <div class="products__amount-name">Продуктов</div>
+                </div>
+                <table class="products__table">
+                    <thead class="products__table-head">
+                        <tr class="products__table-row">
+                            <th class="products__table-header">Название</th>
+                            <th class="products__table-header">Калории</th>
+                            <th class="products__table-header">Белки</th>
+                            <th class="products__table-header">Жиры</th>
+                            <th class="products__table-header">Углеводы</th>
+                        </tr>
+                    </thead>
+                    <tbody class="products__table-body">
+                        {% for item in products_list %}
+                            <tr id="{{ item.0 }}" class="products__table-row">
+                                <td class="products__table-cell">{{ item.1.name }}</td>
+                                <td class="products__table-cell">{{ item.1.calories }}</td>
+                                <td class="products__table-cell">{{ item.1.proteins }}</td>
+                                <td class="products__table-cell">{{ item.1.fats }}</td>
+                                <td class="products__table-cell"><div class="products__table-flex-container">{{ item.1.carbohydrates }}<button class="products__table-btn remove-btn">Убрать из дневника</button></div></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="products__table-row">
+                            <td class="products__table-cell">Итого</td>
+                            <td class="products__table-cell">{{ total.calories }}</td>
+                            <td class="products__table-cell">{{ total.proteins }}</td>
+                            <td class="products__table-cell">{{ total.fats }}</td>
+                            <td class="products__table-cell">{{ total.carbohydrates }}</td>
+                        </tr>
+                        <tr class="products__table-row">
+                            <td class="products__table-cell">Ваша норма</td>
+                            <td class="products__table-cell">{{ cpfc.cals }}</td>
+                            <td class="products__table-cell">{{ cpfc.proteins }}</td>
+                            <td class="products__table-cell">{{ cpfc.fats }}</td>
+                            <td class="products__table-cell">{{ cpfc.crbs }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+        <section class="products">
+            <div class="container">
+                <h1 class="products__title">Добавить продукт в дневник:</h1>
+                <div class="products__select-group">
+                    <div class="products__select-item">
+                        <label class="products__label" for="products__select">Тип продуктов</label>
+                        <div class="products__select">
+                            <select id="products__select">
+                                <option value="vegs">Овощи</option>
+                                <option value="fruits">Фрукты</option>
+                                <option value="grains">Крупы</option>
+                                <option value="meat">Мясо</option>
+                            </select>
+                            <span class="focus"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="products__amount">
+                    <div class="products__amount-img"><img src="{% static 'main/img/fruit.svg' %}" alt=""></div>
+                    <div class="products__amount-num">{{ products_list2.count }}</div>
+                    <div class="products__amount-name">Продуктов</div>
+                </div>
+                <table class="products__table">
+                    <thead class="products__table-head">
+                        <tr class="products__table-row">
+                            <th class="products__table-header">Название</th>
+                            <th class="products__table-header">Калории</th>
+                            <th class="products__table-header">Белки</th>
+                            <th class="products__table-header">Жиры</th>
+                            <th class="products__table-header">Углеводы</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vegetables" class="products__table-body">
+                        {% for item in products_list2 %}
+                            <tr id="{{ item.id }}" class="products__table-row">
+                                <td class="products__table-cell">{{ item.name }}</td>
+                                <td class="products__table-cell">{{ item.calories }}</td>
+                                <td class="products__table-cell">{{ item.proteins }}</td>
+                                <td class="products__table-cell">{{ item.fats }}</td>
+                                <td class="products__table-cell"><div class="products__table-flex-container">{{ item.carbohydrates }}<button class="products__table-btn add-btn">Добавить в дневник</button></div></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    {% else %}
+        <section class="products">
+            <div class="container">
+                <h1 class="products__title">Вы не вошли в аккаунт, чтобы смотреть дневник калорий и добавлять продукты, авторизуйтесь.</h1>
+                <div class="products__select-group">
+                    <div class="products__select-item">
+                        <label class="products__label" for="products__select">Тип продуктов</label>
+                        <div class="products__select">
+                            <select id="products__select" disabled>
+                                <option value="option_1">Овощи</option>
+                                <option value="option_2">Фрукты</option>
+                                <option value="option_3">Мясо</option>
+                            </select>
+                            <span class="focus"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="products__amount">
+                    <div class="products__amount-img"><img src="{% static 'main/img/fruit.svg' %}" alt=""></div>
+                    <div class="products__amount-num">{{ products_list.count }}</div>
+                    <div class="products__amount-name">Продуктов</div>
+                </div>
+                <table class="products__table">
+                    <thead class="products__table-head">
+                        <tr class="products__table-row">
+                            <th class="products__table-header">Название</th>
+                            <th class="products__table-header">Калории</th>
+                            <th class="products__table-header">Белки</th>
+                            <th class="products__table-header">Жиры</th>
+                            <th class="products__table-header">Углеводы</th>
+                        </tr>
+                    </thead>
+                    <tbody class="products__table-body">
+                        {% for item in products_list %}
+                            <tr class="products__table-row">
+                                <td class="products__table-cell">{{ item.name }}</td>
+                                <td class="products__table-cell">{{ item.calories }}</td>
+                                <td class="products__table-cell">{{ item.proteins }}</td>
+                                <td class="products__table-cell">{{ item.fats }}</td>
+                                <td class="products__table-cell"><div class="products__table-flex-container">{{ item.carbohydrates }}</div></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    {% endif %}
+
+    <script type="module">
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function getData(btn) {
+            let btn_parent = btn.parentElement.parentElement.parentElement,
+                product_id = btn_parent.id,
+                product_table = btn_parent.parentElement.id,
+                data = {
+                    'product_id': product_id,
+                    'product_table': product_table
+                }
+            return data;
+        }
+
+        async function add_to_diary(btn) {
+            let data = getData(btn),
+                args = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify(data)
+                }
+
+            let response = await fetch("{% url 'calculator' %}", args);
+            response = await response.json();
+
+            if (response.status == 'success') {
+                let clone = btn.parentElement.parentElement.parentElement.cloneNode(true),
+                    clone_btn = clone.querySelector('.add-btn');
+                clone.id = response.id;
+                clone_btn.classList.remove('add-btn');
+                clone_btn.classList.add('remove-btn');
+                clone_btn.innerText = 'Убрать из дневника';
+                clone_btn.addEventListener('click', async () => {
+                    remove_from_diary(clone_btn);
+                });
+                document.querySelectorAll('.products__table-body')[0].append(clone); // Добавление в таблицу записи
+
+                document.querySelectorAll('.products__amount-num')[0].innerHTML = +document.querySelectorAll('.products__amount-num')[0].innerHTML + 1; // Увеличение счетчика
+
+                let children = document.querySelectorAll('tfoot .products__table-row')[0].children, // Изменяем ИТОГО
+                    clone_children = clone.children;
+
+                for (let i = 1; i < clone_children.length; i++) {
+                    if (i != children.length - 1) {
+                        children[i].innerHTML = +children[i].innerHTML + +clone_children[i].innerHTML;
+                    } else {
+                        children[i].innerHTML = +children[i].innerHTML + +clone_children[i].firstChild.firstChild.textContent;
+                    }
+                }
+
+            } else {
+                document.querySelectorAll('.products__title')[1].innerHTML = 'Ошибка добавления'
+            }
+        }
+
+        async function remove_from_diary(btn) {
+            let btn_parent = btn.parentElement.parentElement.parentElement,
+                record_id = btn_parent.id,
+                data = {
+                    'record_id': record_id
+                },
+                args = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify(data)
+                }
+
+            let response = await fetch("{% url 'remove_product' %}", args);
+            response = await response.json();
+
+            if (response.status == 'success') {
+                let parent = btn.parentElement.parentElement.parentElement;
+
+                document.querySelectorAll('.products__amount-num')[0].innerHTML = +document.querySelectorAll('.products__amount-num')[0].innerHTML - 1; // Увеличение счетчика
+
+                let children = document.querySelectorAll('tfoot .products__table-row')[0].children, // Изменяем ИТОГО
+                    parent_children = parent.children;
+
+                for (let i = 1; i < parent_children.length; i++) {
+                    if (i != children.length - 1) {
+                        children[i].innerHTML = +children[i].innerHTML - +parent_children[i].innerHTML;
+                    } else {
+                        children[i].innerHTML = +children[i].innerHTML - +parent_children[i].firstChild.firstChild.textContent;
+                    }
+                }
+                parent.remove();
+            } else {
+                document.querySelectorAll('.products__title')[0].innerHTML = 'Ошибка удаления';
+            }
+        }
+
+        async function getTableData(value) {
+            let args = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({'value': value})
+            }
+
+            let response = await fetch("{% url 'get_data' %}", args);
+            response = await response.json();
+
+            if (response.status == 'success') {
+                document.querySelectorAll('.products__amount-num')[1].innerHTML = response.products.length;
+
+                let tbody = document.querySelectorAll('.products__table-body')[1];
+                tbody.id = response.tbody_id;
+                tbody.replaceChildren('');
+
+                for (let product of response.products) {
+
+                    let tr = document.createElement('tr');
+                    tr.id = product[0];
+                    tr.className = 'products__table-row';
+
+                    for (let item of product.slice(1, -1)) {
+                        let td = document.createElement('td');
+                        td.className = 'products__table-cell';
+                        td.innerText = item;
+                        tr.append(td);
+                    }
+
+                    let td = document.createElement('td');
+                    td.className = 'products__table-cell';
+
+                    let div = document.createElement('div');
+                    div.className = 'products__table-flex-container';
+                    div.append(product.slice(-1));
+
+                    let btn = document.createElement('button');
+                    btn.className = 'add-btn';
+                    btn.innerText = 'Добавить в дневник';
+
+                    div.append(btn);
+                    td.append(div);
+                    tr.append(td);
+                    tbody.append(tr);
+                }
+                document.querySelectorAll('.add-btn').forEach(b => {
+                    b.addEventListener('click', async () => {
+                        add_to_diary(b);
+                    });
+                });
+            } else {
+                document.querySelectorAll('.products__title')[1].innerHTML = 'Ошибка загрузки';
+            }
+        }
+
+        document.querySelectorAll('.add-btn').forEach(b => {
+            b.addEventListener('click', async () => {
+                add_to_diary(b);
+            });
+        });
+
+        document.querySelectorAll('.remove-btn').forEach(b => {
+            b.addEventListener('click', async () => {
+                remove_from_diary(b);
+            });
+        });
+
+        document.querySelector('#products__select').addEventListener('change', async (event) => {
+            getTableData(event.target.value);
+        });
+
+    </script>
+</main>
+{% endblock %}

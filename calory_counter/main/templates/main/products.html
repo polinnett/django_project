@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    {% for product in products %}
+        <section class="products">
+            <div class='container'>
+                <div class="products__title">{{ product.title }}</div>
+                <div class="products__amount">
+                    <div class="products__amount-img"><img src="{% static 'main/img/fruit.svg' %}" alt=""></div>
+                    <div class="products__amount-num">{{ product.list.count }}</div>
+                    <div class="products__amount-name">Продуктов</div>
+                </div>
+                <table class="products__table">
+                    <thead class="products__table-head">
+                        <tr class="products__table-row">
+                            <th class="products__table-header">Название</th>
+                            <th class="products__table-header">Калории</th>
+                            <th class="products__table-header">Белки</th>
+                            <th class="products__table-header">Жиры</th>
+                            <th class="products__table-header">Углеводы</th>
+                        </tr>
+                    </thead>
+                    <tbody class="products__table-body">
+                        {% for item in product.list %}
+                            <tr class="products__table-row">
+                                <td class="products__table-cell">{{ item.name }}</td>
+                                <td class="products__table-cell">{{ item.calories }}</td>
+                                <td class="products__table-cell">{{ item.proteins }}</td>
+                                <td class="products__table-cell">{{ item.fats }}</td>
+                                <td class="products__table-cell">{{ item.carbohydrates }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>                                
+    {% endfor %}
+</main>
+{% endblock %}

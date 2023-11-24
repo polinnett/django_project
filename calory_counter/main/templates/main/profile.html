@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <section class="profile">
+        <div class="container">
+            <div class="profile__info">
+                <div class="profile__img"><img src="{{ user.profile.photo.url }}" alt="Profile photo"></div>
+                <div class="profile__data">
+                    <div class="profile__data-item">
+                        <span>{{ user.profile.name }}</span>
+                    </div>
+                    <div class="profile__data-item">
+                        Возраст: <span>{{ user.profile.age }}</span>
+                    </div>
+                    <div class="profile__data-item">
+                        Рост: <span>{{ user.profile.height }}</span>
+                    </div>
+                    <div class="profile__data-item">
+                        Вес: <span>{{ user.profile.weight }}</span>
+                    </div>
+                    <div class="profile__data-item">
+                        Норма КБЖУ : <span>{{ cpfc.cals }}/{{ cpfc.proteins }}/{{ cpfc.fats }}/{{ cpfc.crbs }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

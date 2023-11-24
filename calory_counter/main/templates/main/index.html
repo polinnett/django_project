@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <div class="promo">
+        <div class="promo__bg"><img src="{% static 'main/img/promo_bg.jpg' %}" alt="Фон начального экрана"></div>
+        <div class="container">
+            <div class="promo__info">
+                <h1 class="promo__text">
+                    <span>Calculus</span> - бесплатный калькулятор калорий для тех, кто любит следить за своим питанием.
+                </h1>
+                {% if user.is_authenticated %}
+                <div class="promo__btns">
+                    <a href="{% url 'calculator' %}" class="btn btn_large">Калькулятор</a>
+                    <a href="{% url 'profile' %}" class="btn btn_large btn_inversed">Профиль</a>
+                </div>
+                {% else %}
+                <div class="promo__btns">
+                    <a href="{% url 'authentication' %}" class="btn btn_large">Войти</a>
+                    <a href="{% url 'registration' %}" class="btn btn_large btn_inversed">Зарегистрироваться</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

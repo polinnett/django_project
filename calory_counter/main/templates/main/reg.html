@@ -1,0 +1,61 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <section class="form">
+        <div class='container'>
+            <div class="form__wrapper">
+                <div class="form__content">
+                    <form method="post" class="form__body" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if user_form.non_field_errors %}
+                            <div class="form__label">{{ user_form.non_field_errors }}</div>
+                        {% elif profile_form.non_field_errors %}
+                            <div class="form__label">{{ profile_form.non_field_errors }}</div>
+                        {% endif %}
+                        {% for f in user_form %}
+                            {% if f.field.widget.input_type == 'password' %}
+                                <div class="form__input form__password hide">
+                                    {{ f }}
+                                    <a href="#"></a>
+                                </div>
+                            {% else %}
+                                <div class="form__input">
+                                    {% if f.label %}
+                                    <label class="form__label" for="{{ f.id_for_label }}">{{ f.label }}</label>
+                                    {% endif %}
+                                    {{ f }}
+                                </div>
+                            {% endif %}
+                            {% if f.errors %}
+                                <div class="form__label">{{ f.errors }}</div>
+                            {% endif %}
+                        {% endfor %}
+                        {% for f in profile_form %}
+                            {% if f.field.widget.input_type == 'file' %}
+                                <div class="form__input">
+                                    {{ f }}
+                                    <label class="form__upload" for="{{ f.id_for_label }}">{{ f.label }}</label>
+                                    <p class="form__uploaded">Фото загружено</p>
+                                </div>
+                            {% else %}
+                                <div class="form__input">
+                                    {% if f.label %}
+                                    <label class="form__label" for="{{ f.id_for_label }}">{{ f.label }}</label>
+                                    {% endif %}
+                                    {{ f }}
+                                </div>
+                            {% endif %}
+                            {% if f.errors %}
+                                <div class="form__label">{{ f.errors }}</div>
+                            {% endif %}
+                        {% endfor %}                       
+                        <button type="submit" class="btn form__btn form__btn_c">Зарегистрироваться</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
