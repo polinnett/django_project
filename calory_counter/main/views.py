@@ -3,11 +3,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
+from rest_framework import generics
 
 from .forms import UserForm, ProfileForm, LoginForm
 from .models import Vegetable, Fruit, Meat, Grain
+from .serializers import VegetableSerializer
 from .utils import get_context_data, get_cpfc, add_product_to_table, remove_product_from_table, get_products, load_table
 
+class VegetableAPIView(generics.ListAPIView):
+    queryset = Vegetable.objects.all()
+    serializer_class = VegetableSerializer
 
 def index(request):
     context = get_context_data(title="Главная", active_url='home')
