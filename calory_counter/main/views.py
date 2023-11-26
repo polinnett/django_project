@@ -1,18 +1,36 @@
 import json
+
+from django.forms import model_to_dict
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .forms import UserForm, ProfileForm, LoginForm
 from .models import Vegetable, Fruit, Meat, Grain
 from .serializers import VegetableSerializer
 from .utils import get_context_data, get_cpfc, add_product_to_table, remove_product_from_table, get_products, load_table
 
-class VegetableAPIView(generics.ListAPIView):
-    queryset = Vegetable.objects.all()
-    serializer_class = VegetableSerializer
+class VegetableAPIView(APIView):
+    def get(self, request):
+        lst = Vegetable.objects.all().values()
+        return Response({'veg': list(lst)})
+    def post(self, request):
+        veg_new = Vegetable.objects.create(
+            name = request.data['name'],
+            calories = request.data['calories'],
+            proteins = request.data['proteins'],
+            fats = request.data['fats'],
+            carbohydrates = request.data['carbohydrates']
+        )
+        return Response({'veget': model_to_dict(post_new)})
+
+# class VegetableAPIView(generics.ListAPIView):
+#     queryset = Vegetable.objects.all()
+#     serializer_class = VegetableSerializer
 
 def index(request):
     context = get_context_data(title="Главная", active_url='home')
