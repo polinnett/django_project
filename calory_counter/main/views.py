@@ -14,19 +14,26 @@ from .models import Vegetable, Fruit, Meat, Grain
 from .serializers import VegetableSerializer
 from .utils import get_context_data, get_cpfc, add_product_to_table, remove_product_from_table, get_products, load_table
 
+
 class VegetableAPIView(APIView):
     def get(self, request):
-        lst = Vegetable.objects.all().values()
-        return Response({'veg': list(lst)})
+        v = Vegetable.objects.all()
+        return Response({'veg': VegetableSerializer(v, many=True).data})
+
     def post(self, request):
+        serializer = VegetableSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         veg_new = Vegetable.objects.create(
-            name = request.data['name'],
-            calories = request.data['calories'],
-            proteins = request.data['proteins'],
-            fats = request.data['fats'],
-            carbohydrates = request.data['carbohydrates']
+            name=request.data['name'],
+            calories=request.data['calories'],
+            proteins=request.data['proteins'],
+            fats=request.data['fats'],
+            carbohydrates=request.data['carbohydrates']
         )
-        return Response({'veget': model_to_dict(post_new)})
+
+        return Response({'veg': VegetableSerializer(veg_new).data})
+
 
 # class VegetableAPIView(generics.ListAPIView):
 #     queryset = Vegetable.objects.all()
