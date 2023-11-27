@@ -23,16 +23,24 @@ class VegetableAPIView(APIView):
     def post(self, request):
         serializer = VegetableSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        veg_new = Vegetable.objects.create(
-            name=request.data['name'],
-            calories=request.data['calories'],
-            proteins=request.data['proteins'],
-            fats=request.data['fats'],
-            carbohydrates=request.data['carbohydrates']
-        )
+        return Response({'veg': serializer.data})
 
-        return Response({'veg': VegetableSerializer(veg_new).data})
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method PUT is not allowed"})
+        try:
+            instance = Vegetable.objects.get(pk=pk)
+        except:
+            return Response({"error": "Objects does not exist"})
+        serializer = VegetableSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"veg": serializer.data})
+
+
 
 
 # class VegetableAPIView(generics.ListAPIView):

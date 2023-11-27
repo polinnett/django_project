@@ -13,12 +13,32 @@ from .models import Vegetable
 #         self.proteins = proteins
 #         self.fats = fats
 #         self.carbohydrates = carbohydrates
-class VegetableSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=200)
-    calories = serializers.IntegerField()
-    proteins = serializers.FloatField()
-    fats = serializers.FloatField()
-    carbohydrates = serializers.FloatField()
+class VegetableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vegetable
+
+
+
+
+
+    # сериалайзер на базе класса Serializer (получает данные в json-формате, добавляет и изменяет их)
+    # name = serializers.CharField(max_length=200)
+    # calories = serializers.IntegerField()
+    # proteins = serializers.FloatField()
+    # fats = serializers.FloatField()
+    # carbohydrates = serializers.FloatField()
+    #
+    # def create(self, validated_data):
+    #     return Vegetable.objects.create(**validated_data)
+    #
+    # def update(self, instance, validated_data):
+    #     instance.name = validated_data.get("name", instance.name)
+    #     instance.calories = validated_data.get("calories", instance.calories)
+    #     instance.proteins = validated_data.get("proteins", instance.proteins)
+    #     instance.fats = validated_data.get("fats", instance.fats)
+    #     instance.carbohydrates = validated_data.get("carbohydrates", instance.name)
+    #     instance.save()
+    #     return instance
 
 # def encode():
 #     model = VegetableModel('tomato', 23, 1.0, 1.0, 4.0)
