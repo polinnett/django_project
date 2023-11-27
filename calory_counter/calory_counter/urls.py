@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.conf.urls.static import static
+from django.template.defaulttags import url
 from django.urls import path, include
 
 from calory_counter import settings
@@ -16,6 +17,7 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api/v1/proflist/', ProfileAPIList.as_view()),
     path('api/v1/proflist/<int:pk>', ProfileAPIDestroy.as_view()),
+    # url(r'^export/xls/$', views.export_vegs_xls, name="export_vegs_xls"),
 ]
 
 if settings.DEBUG:

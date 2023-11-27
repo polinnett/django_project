@@ -4,8 +4,8 @@ from django.forms import model_to_dict
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.http import JsonResponse
-from rest_framework import generics, viewsets
+from django.http import JsonResponse, HttpResponse
+from rest_framework import generics, viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
@@ -37,14 +37,17 @@ class ProfileAPIList(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
 class ProfileAPIDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsAdminUser, )
 
 class VegetableViewSet(viewsets.ModelViewSet):
-    queryset = Vegetable.objects.all()
+    queryset = Vegetable.objects.filter(name__startswith='Б')
     serializer_class = VegetableSerializer
+    # filterset_fields = ['name', 'fats']
 
 # class VegetableAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Vegetable.objects.all()
@@ -80,6 +83,7 @@ class VegetableViewSet(viewsets.ModelViewSet):
 # class VegetableAPIView(generics.ListAPIView):
 #     queryset = Vegetable.objects.all()
 #     serializer_class = VegetableSerializer
+
 
 def index(request):
     context = get_context_data(title="Главная", active_url='home')
