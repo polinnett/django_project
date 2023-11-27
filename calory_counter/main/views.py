@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
 from rest_framework import generics
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -15,32 +16,43 @@ from .serializers import VegetableSerializer
 from .utils import get_context_data, get_cpfc, add_product_to_table, remove_product_from_table, get_products, load_table
 
 
-class VegetableAPIView(APIView):
-    def get(self, request):
-        v = Vegetable.objects.all()
-        return Response({'veg': VegetableSerializer(v, many=True).data})
+class VegetableAPIList(generics.ListCreateAPIView):
+    queryset = Vegetable.objects.all()
+    serializer_class = VegetableSerializer
 
-    def post(self, request):
-        serializer = VegetableSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+class VegetableAPIUpdate(generics.UpdateAPIView):
+    queryset = Vegetable.objects.all()
+    serializer_class = VegetableSerializer
 
-        return Response({'veg': serializer.data})
+class VegetableAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Vegetable.objects.all()
+    serializer_class = VegetableSerializer
 
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method PUT is not allowed"})
-        try:
-            instance = Vegetable.objects.get(pk=pk)
-        except:
-            return Response({"error": "Objects does not exist"})
-        serializer = VegetableSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"veg": serializer.data})
-
-
+# class VegetableAPIView(APIView):
+#     def get(self, request):
+#         v = Vegetable.objects.all()
+#         return Response({'veg': VegetableSerializer(v, many=True).data})
+#
+#     def post(self, request):
+#         serializer = VegetableSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#
+#         return Response({'veg': serializer.data})
+#
+#     # позиционные и именнованные аргументы
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method PUT is not allowed"})
+#         try:
+#             instance = Vegetable.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Objects does not exist"})
+#         serializer = VegetableSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"veg": serializer.data})
 
 
 # class VegetableAPIView(generics.ListAPIView):

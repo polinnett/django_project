@@ -6,19 +6,10 @@ from rest_framework.renderers import JSONRenderer
 
 from .models import Vegetable
 
-# class VegetableModel:
-#     def __init__(self, name, calories, proteins, fats, carbohydrates):
-#         self.name = name
-#         self.calories = calories
-#         self.proteins = proteins
-#         self.fats = fats
-#         self.carbohydrates = carbohydrates
 class VegetableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vegetable
-
-
-
+        fields = "__all__"
 
 
     # сериалайзер на базе класса Serializer (получает данные в json-формате, добавляет и изменяет их)
@@ -39,6 +30,14 @@ class VegetableSerializer(serializers.ModelSerializer):
     #     instance.carbohydrates = validated_data.get("carbohydrates", instance.name)
     #     instance.save()
     #     return instance
+
+# class VegetableModel:
+#     def __init__(self, name, calories, proteins, fats, carbohydrates):
+#         self.name = name
+#         self.calories = calories
+#         self.proteins = proteins
+#         self.fats = fats
+#         self.carbohydrates = carbohydrates
 
 # def encode():
 #     model = VegetableModel('tomato', 23, 1.0, 1.0, 4.0)
