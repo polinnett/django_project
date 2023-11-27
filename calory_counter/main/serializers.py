@@ -4,11 +4,12 @@ from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from .models import Vegetable
+from .models import Profile
 
-class VegetableSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
+    # user_id = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
-        model = Vegetable
+        model = Profile
         fields = "__all__"
 
 

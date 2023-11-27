@@ -6,28 +6,46 @@ from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
 from rest_framework import generics, viewsets
+from rest_framework.decorators import action
 from rest_framework.generics import ListCreateAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .forms import UserForm, ProfileForm, LoginForm
-from .models import Vegetable, Fruit, Meat, Grain
-from .serializers import VegetableSerializer
+from .models import Vegetable, Fruit, Meat, Grain, Profile
+from .serializers import ProfileSerializer
 from .utils import get_context_data, get_cpfc, add_product_to_table, remove_product_from_table, get_products, load_table
 
 
-class VegetableViewSet(viewsets.ModelViewSet):
-    queryset = Vegetable.objects.all()
-    serializer_class = VegetableSerializer
+# class ProfileViewSet(viewsets.ModelViewSet):
+#     # queryset = Vegetable.objects.all()
+#     serializer_class = ProfileSerializer
+#
+#     def get_queryset(self):
+#         pk = self.kwargs.get("pk")
+#         if not pk:
+#             return Profile.objects.all()
+#         return Profile.objects.filter(pk=pk)
 
-# class VegetableAPIList(generics.ListCreateAPIView):
-#     queryset = Vegetable.objects.all()
-#     serializer_class = VegetableSerializer
-#
-# class VegetableAPIUpdate(generics.UpdateAPIView):
-#     queryset = Vegetable.objects.all()
-#     serializer_class = VegetableSerializer
-#
+    # @action(methods=['get'], detail=True)
+    # def fruit(self, request, pk=None):
+    #     fruit = Fruit.objects.get(pk=pk)
+    #     return Response({'fruit': fruit.name})
+
+class ProfileAPIList(generics.ListCreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+
+class ProfileAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+class ProfileAPIDestroy(generics.RetrieveDestroyAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAdminUser, )
+
 # class VegetableAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Vegetable.objects.all()
 #     serializer_class = VegetableSerializer
