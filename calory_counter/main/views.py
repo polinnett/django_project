@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,17 +16,21 @@ from .serializers import VegetableSerializer
 from .utils import get_context_data, get_cpfc, add_product_to_table, remove_product_from_table, get_products, load_table
 
 
-class VegetableAPIList(generics.ListCreateAPIView):
+class VegetableViewSet(viewsets.ModelViewSet):
     queryset = Vegetable.objects.all()
     serializer_class = VegetableSerializer
 
-class VegetableAPIUpdate(generics.UpdateAPIView):
-    queryset = Vegetable.objects.all()
-    serializer_class = VegetableSerializer
-
-class VegetableAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Vegetable.objects.all()
-    serializer_class = VegetableSerializer
+# class VegetableAPIList(generics.ListCreateAPIView):
+#     queryset = Vegetable.objects.all()
+#     serializer_class = VegetableSerializer
+#
+# class VegetableAPIUpdate(generics.UpdateAPIView):
+#     queryset = Vegetable.objects.all()
+#     serializer_class = VegetableSerializer
+#
+# class VegetableAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Vegetable.objects.all()
+#     serializer_class = VegetableSerializer
 
 # class VegetableAPIView(APIView):
 #     def get(self, request):
