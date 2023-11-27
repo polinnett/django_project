@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 
 from .forms import UserForm, ProfileForm, LoginForm
 from .models import Vegetable, Fruit, Meat, Grain, Profile
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer, VegetableSerializer
 from .utils import get_context_data, get_cpfc, add_product_to_table, remove_product_from_table, get_products, load_table
 
 
@@ -37,14 +37,14 @@ class ProfileAPIList(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
-
-class ProfileAPIUpdate(generics.RetrieveUpdateAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-class ProfileAPIDestroy(generics.RetrieveDestroyAPIView):
+class ProfileAPIDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsAdminUser, )
+
+class VegetableViewSet(viewsets.ModelViewSet):
+    queryset = Vegetable.objects.all()
+    serializer_class = VegetableSerializer
 
 # class VegetableAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Vegetable.objects.all()

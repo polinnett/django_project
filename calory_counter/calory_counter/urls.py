@@ -6,17 +6,16 @@ from calory_counter import settings
 from main.views import *
 from rest_framework import routers
 
-# router = routers.DefaultRouter()
-# router.register(r'profile', ProfileViewSet, basename='profile')
+router = routers.DefaultRouter()
+router.register(r'veg', VegetableViewSet, basename='veg')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
-    # path('api/v1/', include(router.urls)),
+    path('api/v1/', include(router.urls)),
     path('api/v1/proflist/', ProfileAPIList.as_view()),
-    path('api/v1/proflist/<int:pk>', ProfileAPIUpdate.as_view()),
-    path('api/v1/profdelete/<int:pk>', ProfileAPIDestroy.as_view()),
+    path('api/v1/proflist/<int:pk>', ProfileAPIDestroy.as_view()),
 ]
 
 if settings.DEBUG:
