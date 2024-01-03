@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from simple_history.models import HistoricalRecords
 
 
 class Vegetable(models.Model):
@@ -9,6 +10,7 @@ class Vegetable(models.Model):
     proteins = models.FloatField(verbose_name='Белки')
     fats = models.FloatField(verbose_name='Жиры')
     carbohydrates = models.FloatField(verbose_name='Углеводы')
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -25,6 +27,7 @@ class Fruit(models.Model):
     proteins = models.FloatField(verbose_name='Белки')
     fats = models.FloatField(verbose_name='Жиры')
     carbohydrates = models.FloatField(verbose_name='Углеводы')
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -41,6 +44,7 @@ class Meat(models.Model):
     proteins = models.FloatField(verbose_name='Белки')
     fats = models.FloatField(verbose_name='Жиры')
     carbohydrates = models.FloatField(verbose_name='Углеводы')
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -57,6 +61,7 @@ class Grain(models.Model):
     proteins = models.FloatField(verbose_name='Белки')
     fats = models.FloatField(verbose_name='Жиры')
     carbohydrates = models.FloatField(verbose_name='Углеводы')
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -75,6 +80,7 @@ class Profile(models.Model):
     weight = models.IntegerField(verbose_name='Вес')
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name='Фото')
     reg_date = models.DateField(default=timezone.now)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -90,6 +96,7 @@ class Record(models.Model):
     fruit_id = models.ManyToManyField(Fruit, blank=True, verbose_name='Фрукт')
     meat_id = models.ManyToManyField(Meat, blank=True, verbose_name='Мясо')
     grain_id = models.ManyToManyField(Grain, blank=True, verbose_name='Крупа')
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = 'Запись'

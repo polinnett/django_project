@@ -1,17 +1,17 @@
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 
 from .models import Vegetable, Fruit, Meat, Grain, Profile, Record
 from import_export.admin import ExportActionModelAdmin
 from import_export import resources
 
 
-class RecordAdmin(resources.ModelResource):
+class RecordResource(resources.ModelResource):
     class Meta:
         model = Record
 
-
 class RecordAdmin(ExportActionModelAdmin):
-    resource_class = Record
+    resource_class = RecordResource
 
 
 class ProductsAdmin(admin.ModelAdmin):
@@ -29,7 +29,7 @@ class ProfileAdmin(admin.ModelAdmin):
     date_hierarchy = 'reg_date'
 
 
-class RecordAdmin(admin.ModelAdmin):
+class RecordAdmin(SimpleHistoryAdmin):
     filter_horizontal = ('veg_id', 'fruit_id', 'meat_id', 'grain_id')
     raw_id_fields = ['user_id']
 

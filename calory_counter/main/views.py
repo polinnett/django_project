@@ -11,10 +11,11 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.models import Q
 
 from .forms import UserForm, ProfileForm, LoginForm
-from .models import Vegetable, Fruit, Meat, Grain, Profile
-from .serializers import ProfileSerializer, VegetableSerializer
+from .models import Vegetable, Fruit, Meat, Grain, Profile, Record
+from .serializers import ProfileSerializer, VegetableSerializer, RecordSerializer
 from .utils import get_context_data, get_cpfc, add_product_to_table, remove_product_from_table, get_products, load_table
 
 
@@ -34,7 +35,7 @@ from .utils import get_context_data, get_cpfc, add_product_to_table, remove_prod
     #     return Response({'fruit': fruit.name})
 
 class ProfileAPIList(generics.ListCreateAPIView):
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.filter((Q(name__startswith='П') | Q(name__startswith='А')) & ~Q(age__lte=20))
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
     filter_backends = [filters.SearchFilter]
@@ -45,9 +46,33 @@ class ProfileAPIDestroy(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser, )
 
 class VegetableViewSet(viewsets.ModelViewSet):
-    queryset = Vegetable.objects.filter(name__startswith='Б')
+    queryset = Vegetable.objects.filter((Q(name__startswith='Б') | Q(name__startswith='А')) & ~Q(calories__lte=30))
     serializer_class = VegetableSerializer
     # filterset_fields = ['name', 'fats']
+
+# class FruitViewSet(viewsets.ModelViewSet):
+#     queryset = Fruit.objects.filter((Q(name__startswith='Б') | Q(name__startswith='А')) & ~Q(calories__lte=30))
+#     serializer_class = FruitSerializer
+
+class RecordAPIList(generics.ListCreateAPIView):
+    queryset = Record.objects.all()
+    serializer_class = RecordSerializer
+    def get_queryset(self):
+        veg_id = self.kwargs['veg_id']
+        user = self.request.user
+        profile = Profile.objects.get(user_id=user)
+        return Record.objects.filter(user_id=profile, veg_id=veg_id)
+
+class RecordQueryAPIList(generics.ListCreateAPIView):
+    queryset = Record.objects.all()
+    serializer_class = RecordSerializer
+    def get_queryset(self):
+        user = self.request.user
+        profile = Profile.objects.get(user_id=user)
+        veg_id = self.request.query_params.get('veg_id')
+        if veg_id is not None:
+            return Record.objects.filter(user_id=profile, veg_id=veg_id)
+        return Record.objects.filter(user_id=profile)
 
 # class VegetableAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Vegetable.objects.all()
