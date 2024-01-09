@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse, HttpResponse
-from rest_framework import generics, viewsets, filters
+from rest_framework import generics, viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Q
 
+from . import models
 from .forms import UserForm, ProfileForm, LoginForm
 from .models import Vegetable, Fruit, Meat, Grain, Profile, Record
 from .serializers import ProfileSerializer, VegetableSerializer, RecordSerializer
@@ -48,6 +49,23 @@ class ProfileAPIDestroy(generics.RetrieveUpdateDestroyAPIView):
 class VegetableViewSet(viewsets.ModelViewSet):
     queryset = Vegetable.objects.filter((Q(name__startswith='Б') | Q(name__startswith='А')) & ~Q(calories__lte=30))
     serializer_class = VegetableSerializer
+    @action(detail=False)
+    def some_vegs(self, request):
+        vegs = Vegetable.objects.all().order_by('-calories')
+
+        serializer = self.get_serializer(vegs, many=True)
+        return Response(serializer.data)
+    @action(detail=True, methods=['post'])
+    def add_veg(self, request, pk=None):
+        serializer = VegetableSerializer(data=request.data)
+        if serializer.is_valid():
+            valid_fields = [field.name for field in Vegetable._meta.get_fields()]
+            valid_vegetable_data = {key: request.data[key] for key in valid_fields if key in request.data}
+            vegetable = Vegetable.objects.create(**valid_vegetable_data).save()
+            # Vegetable.objects.create(request.data).save()
+            return Response({'status': 'Vegetable added'})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     # filterset_fields = ['name', 'fats']
 
 # class FruitViewSet(viewsets.ModelViewSet):

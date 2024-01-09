@@ -80,6 +80,7 @@ class Profile(models.Model):
     weight = models.IntegerField(verbose_name='Вес')
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name='Фото')
     reg_date = models.DateField(default=timezone.now)
+    is_active = models.BooleanField(default=True)
     history = HistoricalRecords()
 
     def __str__(self):

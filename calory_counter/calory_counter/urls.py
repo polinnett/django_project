@@ -20,7 +20,6 @@ urlpatterns = [
     path('api/v1/proflist/<int:pk>', ProfileAPIDestroy.as_view()),
     re_path('api/v1/record/(?P<veg_id>.+)/$', RecordAPIList.as_view()),
     path('api/v1/record/', RecordQueryAPIList.as_view()),
-    # url(r'^export/xls/$', views.export_vegs_xls, name="export_vegs_xls"),
 ]
 
 if settings.DEBUG:

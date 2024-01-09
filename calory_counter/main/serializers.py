@@ -8,6 +8,11 @@ from .models import Profile, Vegetable, Record
 
 class ProfileSerializer(serializers.ModelSerializer):
     user_id = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def validate_age(self, value):
+        if value > 100 or age < value:
+            raise serializers.ValidationError('Неверный возраст')
+        return age
     class Meta:
         model = Profile
         fields = "__all__"

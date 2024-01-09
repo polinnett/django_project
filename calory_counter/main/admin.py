@@ -60,32 +60,21 @@ class GrainAdmin(CustomExportImportMixin, ProductsAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user_id', 'name', 'age', 'height', 'weight', 'photo', 'reg_date']
+    list_display = ['user_id', 'name', 'age', 'height', 'weight', 'photo', 'reg_date', 'is_active']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['name', 'age', 'height', 'weight']
     date_hierarchy = 'reg_date'
+    ordering = ['height']
 
 
 class RecordResource(resources.ModelResource):
-    type = fields.Field()
+    name = fields.Field()
     class Meta:
         model = Record
-    def dehydrate_type(self, record):
-        veg_id = getattr(record, "veg_id", "unknown")
-        fruit_id = getattr(record, "fruit_id", "unknown")
-        meat_id = getattr(record, "meat_id", "unknown")
-        grain_id = getattr(record, "grain_id", "unknown")
-        cat = ''
-        if veg_id != None:
-            cat = "Овощь"
-        if fruit_id != None:
-            cat = "fru"
-        if meat_id != None:
-            cat = "meat"
-        if grain_id != None:
-            cat = "gra"
-        return cat
+    def dehydrate_name(self, record):
+        user_id = getattr(record, "user_id", "unknown")
+        return user_id.name
 class RecordAdmin(CustomExportImportMixin, SimpleHistoryAdmin):
     filter_horizontal = ('veg_id', 'fruit_id', 'meat_id', 'grain_id')
     raw_id_fields = ['user_id']
