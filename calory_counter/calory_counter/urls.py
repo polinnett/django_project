@@ -9,7 +9,6 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'veg', VegetableViewSet, basename='veg')
-# router.register(r'fruit', FruitViewSet, basename='fru')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

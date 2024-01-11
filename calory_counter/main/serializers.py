@@ -21,8 +21,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class VegetableSerializer(serializers.ModelSerializer):
-    # user_id = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
+    user_id = serializers.HiddenField(default=serializers.CurrentUserDefault())
     def create(self, validated_data):
         return Vegetable.objects.create(**validated_data)
 

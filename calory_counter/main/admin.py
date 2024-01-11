@@ -1,4 +1,5 @@
 from django.contrib import admin
+from import_export.formats import base_formats
 from simple_history.admin import SimpleHistoryAdmin
 
 from .models import Vegetable, Fruit, Meat, Grain, Profile, Record
@@ -21,6 +22,12 @@ class CustomExportImportMixin(ImportExportMixin):
             file_format.get_extension(),
         )
         return filename
+    def get_export_formats(self):
+        formats = (
+            base_formats.CSV,
+            base_formats.XLSX
+        )
+        return [f for f in formats if f().can_export()]
 
 class FruitResource(resources.ModelResource):
     title = fields.Field()
