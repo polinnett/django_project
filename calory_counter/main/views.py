@@ -44,7 +44,7 @@ class ProfileAPIList(generics.ListCreateAPIView):
 class ProfileAPIDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = (IsAdminUser, )
+    permission_classes = (IsAdminUser)
 
 class VegetableViewSet(viewsets.ModelViewSet):
     queryset = Vegetable.objects.filter((Q(name__startswith='Б') | Q(name__startswith='А')) & ~Q(calories__lte=30))
@@ -55,9 +55,10 @@ class VegetableViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(vegs, many=True)
         return Response(serializer.data)
+
     @action(detail=True, methods=['post'])
     def add_veg(self, request, pk=None):
-        serializer = VegetableSerializer(data=request.data)
+        serializer = VegetableSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             valid_fields = [field.name for field in Vegetable._meta.get_fields()]
             valid_vegetable_data = {key: request.data[key] for key in valid_fields if key in request.data}
